@@ -5,6 +5,7 @@
     "is_first_login": true,
     "likes_pizza": "true",
     "register_date": "2015/08/21 15:45:45",
+    "test_timestamp": 1487263079.477015,
     "favorite_pizza": {
         "pizza_id": 5,
         "name": "Catuperoni",

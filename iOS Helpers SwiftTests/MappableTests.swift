@@ -41,6 +41,7 @@ struct User: Mappable {
     var isFirstLogin: Bool
     var likesPizza: Bool
     var registerDate: Date
+    var testTimestamp: Date
     var favoritePizza: Pizza
     var orderedPizzas: [Pizza]
     var favoritePizzaName: String
@@ -57,6 +58,7 @@ struct User: Mappable {
         self.isFirstLogin = mapper.keyPath("is_first_login")
         self.likesPizza = mapper.keyPath("likes_pizza")
         self.registerDate = mapper.keyPath("register_date")
+        self.testTimestamp = mapper.keyPath("test_timestamp")
         self.favoritePizza = mapper.keyPath("favorite_pizza")
         self.orderedPizzas = mapper.keyPath("OrderedPizzas")
         self.favoritePizzaName = mapper.keyPath("favorite_pizza.name")
@@ -86,6 +88,7 @@ class MappableTests: XCTestCase {
         dateFormatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
         
         XCTAssertEqual(user.registerDate, dateFormatter.date(from: "2015/08/21 15:45:45"))
+        XCTAssertEqual(user.testTimestamp, Date(timeIntervalSince1970: 1487263079.477015))
         
         XCTAssertEqual(user.favoritePizza.pizzaID, 5)
         XCTAssertEqual(user.favoritePizza.name, "Catuperoni")

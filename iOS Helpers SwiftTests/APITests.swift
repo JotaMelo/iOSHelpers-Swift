@@ -49,17 +49,17 @@ class APITests: XCTestCase {
                                              "phone": "313131331",
                                              "age": 12]
         
-        let encodedJSONString = API.JSONParameterEncoding.encode(parameters: testDictionary)
+        let encodedJSONString = API.JSONParameterEncoder.encode(parameters: testDictionary)
         let decodedJSONFromString = try! JSONSerialization.jsonObject(with: encodedJSONString.data(using: .utf8)!, options: []) as! [String: Any]
         XCTAssert(NSDictionary(dictionary: testDictionary).isEqual(to: decodedJSONFromString))
         
-        let encodedQueryString = API.URLParameterEncoding.encode(parameters: testDictionary)
+        let encodedQueryString = API.URLParameterEncoder.encode(parameters: testDictionary)
         XCTAssertEqual(encodedQueryString, "phone=313131331&name=Jo%C3%A3o%20Pedro%20%28Jota%29%20Melo&age=12&id=123")
         
         // url query (obviously) can't retain type info so
         // everything must be string for the assert to work
         testDictionary["age"] = "12"
-        let decodedQuery = API.URLParameterEncoding.decode(queryString: encodedQueryString)
+        let decodedQuery = API.URLParameterEncoder.decode(queryString: encodedQueryString)
         XCTAssert(NSDictionary(dictionary: testDictionary).isEqual(to: decodedQuery!))
     }
     

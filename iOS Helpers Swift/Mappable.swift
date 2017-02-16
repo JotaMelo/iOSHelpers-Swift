@@ -84,6 +84,8 @@ extension Mapper {
             return value
         } else if let value = value as? Float {
             return Int(value)
+        } else if let value = value as? Double {
+            return Int(value)
         } else if let value = value as? String {
             return Int(value)
         }
@@ -96,7 +98,7 @@ extension Mapper {
         if let value = value as? Bool {
             return value
         } else if let value = value as? Int {
-            return value != 0
+            return value > 0
         } else if let value = value as? String {
             switch value.lowercased() {
             case "true", "1":
@@ -117,10 +119,8 @@ extension Mapper {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = self.dateFormat
             return dateFormatter.date(from: value)
-        } else if let value = value as? Int {
-            return Date(timeIntervalSince1970: TimeInterval(value))
-        } else if let value = value as? Float { // maybe it has milliseconds
-            return Date(timeIntervalSince1970: TimeInterval(value))
+        } else if let value: TimeInterval = self.map(value) {
+            return Date(timeIntervalSince1970: value)
         }
         
         return nil

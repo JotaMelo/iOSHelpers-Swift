@@ -193,9 +193,9 @@ Suporta os seguintes tipos:
 * `Double`
 * `Int`
 * `Double`
-* `Bool`
-* `Date`
-* `URL`
+* `Bool` - alem do `Bool`, também converte corretamente as strings `"true"`, `"false"`, `"0"`, `"1"`.
+* `Date` - se for uma string converte usando o date format configurado, se for um `Int`/`Float` assume ser uma timestamp em segundos
+* `URL` (a partir de uma string)
 * `RawRepresentable` (enums)
 * `Array`
 * `Array` de `Mappable`s
