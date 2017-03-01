@@ -9,7 +9,7 @@ Zero dependencias externas.
 Temos 3 arquivos:
 
 * `API.swift`
-  * Declaração do enum de método HTTP e opções de cache
+  * Declaração do enum de métodos HTTP e opções de cache
   * Helper methods
   * Encoding de parametros
   * Builder de requests multipart/form-data
@@ -102,12 +102,14 @@ Vamos por partes:
 A classe define um tipo de erro próprio: ```RequestError```
 
 ```swift
-enum RequestError: Error {
-    case error(responseObject: Any?, urlResponse: HTTPURLResponse?, originalError: Error?)
+struct RequestError: Error {
+    var responseObject: Any?
+    var urlResponse: HTTPURLResponse?
+    var originalError: Error?
 }
 ```
 
-Apesar de ter apenas um erro definido, ele contém o `responseObject`, com o corpo da resposta da API (se disponível), a `HTTPURLResponse`, util para acessar dados como o statusCode, e finalmente o `Error` original reportado pelo sistema. Quando ocorre um erro, não é retornado um valor para o parametro `response` do `ResponseBlock`, apesar para o `error`, que contém todas as informações necessárias. 
+Ele contém o `responseObject`, com o corpo da resposta da API (se disponível), a `HTTPURLResponse`, util para acessar dados como o statusCode, e finalmente o `Error` original reportado pelo sistema. Quando ocorre um erro, não é retornado um valor para o parametro `response` do `ResponseBlock`, apenas para o `error`, que contém todas as informações necessárias. 
 
 Por padrão a classe mostra um ```UIAlertController``` com o ```localizedDescription``` do ```RequestError```. Você pode alterar o tratamento do `localizedDescription` na extensão encontrada no fim do `APIRequest.swift`. A implementação padrão verifica a existência de uma string na chave `error` do `responseObject` e mostra ela.
 
@@ -117,14 +119,14 @@ Exemplo de uso:
 UserAPI.profile { (response, error, cache) in
     
     if let response = response {
-        // request ok, "response" is a User
-    } else if let error = error, case let API.RequestError.error(responseObject, urlResponse, originalError) = error {
-        if let urlResponse = urlResponse, urlResponse.statusCode == 401 {
+        // request ok, "response" is an User
+    } else if let error = error {
+        if let urlResponse = error.urlResponse, urlResponse.statusCode == 401 {
             // logout user
-        } else if let responseObject = responseObject as? [String: Any], errorMessage = responseObject["error_message"] {
-            // show "errorMessage"
+        } else if let responseObject = error.responseObject as? [String: Any], let errorMessage = responseObject["error_message"] {
+            // show errorMessage
         } else {
-            // show originalError.localizedDescription
+            // show error.originalError.localizedDescription
         }
     }
 }

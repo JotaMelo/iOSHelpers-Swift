@@ -8,6 +8,10 @@
 
 import UIKit
 
+struct User: Mappable {
+    init(mapper: Mapper) { }
+}
+
 class AuthenticationAPI: APIRequest {
 
     override init(method: API.HTTPMethod, path: String, parameters: [String : Any]?, urlParameters: [String : Any]?, cacheOption: API.CacheOption, completion: ResponseBlock<Any>?) {
@@ -17,15 +21,15 @@ class AuthenticationAPI: APIRequest {
     }
     
     @discardableResult
-    static func loginWith(username: String, password: String, callback: ResponseBlock<String>?) -> AuthenticationAPI {
+    static func loginWith(username: String, password: String, callback: ResponseBlock<User>?) -> AuthenticationAPI {
         
         let request = AuthenticationAPI(method: .post, path: "login", parameters: ["username": username, "password": password], urlParameters: nil, cacheOption: .networkOnly) { (response, error, cache) in
             
-            if let error = error, case let API.RequestError.error(responseObject, urlResponse, originalError) = error {
-                error
+            if let error = error {
+                print(error.responseObject ?? "nil")
             } else if let response = response as? [String: Any] {
-//                let user = User(dictionary: response)
-                callback?("", nil, cache)
+                let user = User(dictionary: response)
+                callback?(user, nil, cache)
             }
         }
         request.shouldSaveInCache = false

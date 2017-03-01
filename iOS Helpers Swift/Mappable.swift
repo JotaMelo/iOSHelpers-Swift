@@ -301,6 +301,10 @@ fileprivate extension Dictionary where Key: StringProtocol {
     subscript(keyPath keyPath: String) -> Any? {
         
         get {
+            if keyPath.isEmpty {
+                return self
+            }
+            
             return self[keyPath: KeyPath(keyPath)]
         }
     }
