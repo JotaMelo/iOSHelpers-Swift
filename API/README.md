@@ -1,5 +1,3 @@
-(essas classes foram feitas para uso interno na iOasys. Você eventual internauta™ que caiu aqui fique a vontade para usar como quiser, mas a documentação abaixo foi feita com esses usuários especificos em mente)
-
 # **API** #
 
 Classe base de API, com suporte a cache.
