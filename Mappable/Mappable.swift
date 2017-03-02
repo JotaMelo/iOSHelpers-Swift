@@ -84,6 +84,8 @@ extension Mapper {
             return value
         } else if let value = value as? Float {
             return Int(value)
+        } else if let value = value as? Double {
+            return Int(value)
         } else if let value = value as? String {
             return Int(value)
         }
@@ -96,7 +98,7 @@ extension Mapper {
         if let value = value as? Bool {
             return value
         } else if let value = value as? Int {
-            return value != 0
+            return value > 0
         } else if let value = value as? String {
             switch value.lowercased() {
             case "true", "1":
@@ -117,10 +119,8 @@ extension Mapper {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = self.dateFormat
             return dateFormatter.date(from: value)
-        } else if let value = value as? Int {
-            return Date(timeIntervalSince1970: TimeInterval(value))
-        } else if let value = value as? Float { // maybe it has milliseconds
-            return Date(timeIntervalSince1970: TimeInterval(value))
+        } else if let value: TimeInterval = self.map(value) {
+            return Date(timeIntervalSince1970: value)
         }
         
         return nil
@@ -301,6 +301,10 @@ fileprivate extension Dictionary where Key: StringProtocol {
     subscript(keyPath keyPath: String) -> Any? {
         
         get {
+            if keyPath.isEmpty {
+                return self
+            }
+            
             return self[keyPath: KeyPath(keyPath)]
         }
     }
@@ -329,8 +333,8 @@ fileprivate extension Dictionary where Key: StringProtocol {
                     // Convert next key path segment to int
                     
                     guard let arrayIndex = Int(remainingKeyPath.segments[0]),
-                          arrayIndex <= nestedArray.count - 1,
-                          let value = nestedArray[arrayIndex] as? [Key: Any] else { return nil }
+                        arrayIndex <= nestedArray.count - 1,
+                        let value = nestedArray[arrayIndex] as? [Key: Any] else { return nil }
                     
                     var remainingKeyPath = remainingKeyPath
                     remainingKeyPath.segments.remove(at: 0)

@@ -28,8 +28,10 @@ struct API {
         case both
     }
     
-    enum RequestError: Error {
-        case error(responseObject: Any?, urlResponse: HTTPURLResponse?, originalError: Error?)
+    struct RequestError: Error {
+        var responseObject: Any?
+        var urlResponse: HTTPURLResponse?
+        var originalError: Error?
     }
     
     static func checkForDataObjectsIn(_ parameters: [Any]) -> Bool {
@@ -136,7 +138,7 @@ struct API {
                 } else {
                     self.addPart(value, key: key)
                 }
-            
+
                 self.body.append(boundaryData)
             }
             

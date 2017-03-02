@@ -148,7 +148,7 @@ public class APIRequest {
         NSLog("\n\n%@ %@", self.method.rawValue, response ?? "<nil>")
         NSLog("%@", "\(responseObject)")
         
-        let error = API.RequestError.error(responseObject: responseObject, urlResponse: response as? HTTPURLResponse, originalError: error)
+        let error = API.RequestError(responseObject: responseObject, urlResponse: response as? HTTPURLResponse, originalError: error)
         
         if !self.suppressErrorAlert {
             self.showErrorMessage(error: error)
@@ -241,15 +241,12 @@ public class APIRequest {
 extension API.RequestError: LocalizedError {
     
     public var errorDescription: String? {
-        switch self {
-        case .error(let responseObject, let urlResponse, let originalError):
-            if let responseObject = responseObject as? [String: Any], let error = responseObject["error"] as? String {
-                return error
-            } else if let urlResponse = urlResponse {
-                return HTTPURLResponse.localizedString(forStatusCode: urlResponse.statusCode)
-            }
-            
-            return originalError?.localizedDescription
+        if let responseObject = self.responseObject as? [String: Any], let error = responseObject["error"] as? String {
+            return error
+        } else if let urlResponse = self.urlResponse {
+            return HTTPURLResponse.localizedString(forStatusCode: urlResponse.statusCode)
         }
+        
+        return self.originalError?.localizedDescription
     }
 }
