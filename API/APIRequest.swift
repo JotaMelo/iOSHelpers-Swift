@@ -63,7 +63,7 @@ public class APIRequest {
         defer {
             self.method = method
             self.path = path
-            self.baseURL = (self.baseURL)
+            self.baseURL = [self.baseURL][0]
             self.parameters = parameters
             self.urlParameters = urlParameters
             self.extraHeaders = nil
@@ -109,7 +109,7 @@ public class APIRequest {
         let responseObject = self.parse(data)
         
         NSLog("\n\n%@ %@", self.method.rawValue, response)
-        NSLog("%@", "\(responseObject)")
+        NSLog("%@", "\(String(describing: responseObject))")
         
         if let responseObject = responseObject, self.shouldSaveInCache {
             APICacheManager.shared.write(data: responseObject, toCacheFile: self.cacheFileName)
@@ -146,7 +146,7 @@ public class APIRequest {
         let responseObject = self.parse(data)
         
         NSLog("\n\n%@ %@", self.method.rawValue, response ?? "<nil>")
-        NSLog("%@", "\(responseObject)")
+        NSLog("%@", "\(String(describing: responseObject))")
         
         let error = API.RequestError(responseObject: responseObject, urlResponse: response as? HTTPURLResponse, originalError: error)
         
