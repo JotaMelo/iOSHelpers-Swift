@@ -41,6 +41,8 @@ extension Mapper {
         
         if let value = value as? String {
             return value
+        } else if value is NSNull {
+            return nil
         } else if let value = value {
             return "\(value)"
         }
