@@ -155,10 +155,10 @@ public class APIRequest {
         }
         
         if Thread.isMainThread {
-            self.completionBlock?(responseObject, error, false)
+            self.completionBlock?(nil, error, false)
         } else {
             DispatchQueue.main.async {
-                self.completionBlock?(responseObject, error, false)
+                self.completionBlock?(nil, error, false)
             }
         }
     }
