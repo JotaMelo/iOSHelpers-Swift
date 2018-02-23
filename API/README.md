@@ -172,7 +172,7 @@ Agora vamos supor que em todo request dessa API voce precise mandar, por exemplo
 override var parameters: [String : Any]? {
     didSet {
         if parameters != nil {
-            super.parameters?["email": userEmail]
+            super.parameters?["email"] = userEmail
         } else {
             super.parameters = ["email": userEmail]
         }
